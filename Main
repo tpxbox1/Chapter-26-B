@@ -1,0 +1,181 @@
+// ***********************************************
+// Program Abstract
+// This program moves a knight around a chess board.
+// ***********************************************
+
+// ***********************************************
+// Program Variable Dictionary
+// board[][] is the chess board
+// startRow is the starting row
+//	startCol is the starting col
+// rowPos is the current row postion
+// colPos is the current col postion
+// moves is the number of moves
+// ACCESS determinds where the knight moves
+// temp is the value of the lowest access location
+// poss checks if move is possible
+// ***********************************************
+import java.io.*;
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class ch_26b
+{
+    public static void main(String[] args)
+    {
+		System.out.println("\nLab26b 100 Point Version\n");
+		Knight knight = new Knight();
+		knight.getStart();
+		knight.solveTour();
+      System.out.println();
+		knight.displayBoard();
+    }
+}
+class Knight
+{
+		private int board[][];			// stores the sequence of knight moves
+		private int startRow;			// row location where the knight starts
+		private int startCol;			// col location where the knight starts
+		private int rowPos;			// current row position of the knight
+		private int colPos;			// current col position of the knight
+		private int moves;			// number of location visited by the knight
+
+		final private int ACCESS[][] = {{0,0,0,0,0,0,0,0,0,0,0,0},
+			 						 			  {0,0,0,0,0,0,0,0,0,0,0,0},
+			     					 			  {0,0,2,3,4,4,4,4,3,2,0,0},
+			     					 			  {0,0,3,4,6,6,6,6,4,3,0,0},
+			     					 			  {0,0,4,6,8,8,8,8,6,4,0,0},
+			     					 		     {0,0,4,6,8,8,8,8,6,4,0,0},
+			     					 			  {0,0,4,6,8,8,8,8,6,4,0,0},
+			     					 			  {0,0,4,6,8,8,8,8,6,4,0,0},
+			     					 			  {0,0,3,4,6,6,6,6,4,3,0,0},
+			     					 			  {0,0,2,3,4,4,4,4,3,2,0,0},
+			     					 			  {0,0,0,0,0,0,0,0,0,0,0,0},
+			     					 			  {0,0,0,0,0,0,0,0,0,0,0,0}};
+
+		public Knight()
+			// constructor used to initializes the data attributes
+		{
+			startRow=0;
+			startCol=0;
+			rowPos=0;
+			colPos=0;
+			moves=1;
+			board = new int[8][8];
+			for (int r= 0;r < 8;r++)
+			{
+				for (int c= 0;c < 8;c++)
+				{
+					board[r][c]=0;
+				}
+			}
+		}
+		public void getStart() //throws IOException
+		// input method to get starting row and col from keyboard entry
+		{
+			Scanner scanner = new Scanner(System.in);
+			System.out.print("Enter row start  ===>>  ");
+			startRow = scanner.nextInt();
+			System.out.print("Enter col start  ===>>  ");
+			startCol = scanner.nextInt();
+			board[startRow][startCol]=moves;
+			rowPos=startRow;
+			colPos=startCol;
+		}
+		public void displayBoard()
+		// displays the chessboard after the tour is concluded
+		{
+			DecimalFormat twoDigits = new DecimalFormat("00");
+			for (int r = 0;r<8;r++)
+			{
+				for (int c = 0;c<8;c++)
+				{
+					System.out.print(twoDigits.format(board[r][c]) + "  ");
+				}
+				System.out.println();
+			}
+				System.out.println();
+		}
+		private boolean getMove()
+		{
+		// computes the next available knight's move.
+			int temp = 9;
+			int rowTemp=0;
+			int colTemp=0;
+			boolean poss = false;
+			if ((ACCESS[rowPos][colPos+3] < temp) &&(ACCESS[rowPos][colPos+3] != 0)&& (board[rowPos-2][colPos+1]== 0) )
+			{
+				rowTemp = rowPos-2;
+				colTemp = colPos+1;
+				temp = ACCESS[rowPos][colPos+3];
+
+				poss = true;
+			}
+			if((ACCESS[rowPos+1][colPos+4] < temp) &&(ACCESS[rowPos+1][colPos+4] != 0)&&(board[rowPos-1][colPos+2]== 0) )
+			{
+
+				rowTemp = rowPos-1;
+				colTemp = colPos+2;
+				temp = ACCESS[rowPos+1][colPos+4];
+				poss = true;
+			}
+			if((ACCESS[rowPos+3][colPos+4] < temp) &&(ACCESS[rowPos+3][colPos+4] != 0)&&(board[rowPos+1][colPos+2]== 0))
+			{
+				rowTemp = rowPos+1;
+				colTemp = colPos+2;
+				temp = ACCESS[rowPos+3][colPos+4];
+				poss = true;
+			}
+			if((ACCESS[rowPos+4][colPos+3] < temp) &&(ACCESS[rowPos+4][colPos+3] != 0)&&(board[rowPos+2][colPos+1]== 0))
+			{
+				rowTemp = rowPos+2;
+				colTemp = colPos+1;
+				temp = ACCESS[rowPos+4][colPos+3];
+				poss = true;
+			}
+			if((ACCESS[rowPos+4][colPos+1] < temp) &&(ACCESS[rowPos+4][colPos+1] != 0)&&(board[rowPos+2][colPos-1]== 0))
+			{
+				rowTemp = rowPos+2;
+				colTemp = colPos-1;
+				temp = ACCESS[rowPos+4][colPos+1];
+				poss = true;
+			}
+			if((ACCESS[rowPos+3][colPos] < temp) &&(ACCESS[rowPos+3][colPos] != 0)&&(board[rowPos+1][colPos-2]== 0))
+			{
+				rowTemp = rowPos+1;
+				colTemp = colPos-2;
+				temp = ACCESS[rowPos+3][colPos];
+				poss = true;
+			}
+		  	if((ACCESS[rowPos+1][colPos] < temp) &&(ACCESS[rowPos+1][colPos] != 0)&&(board[rowPos-1][colPos-2]== 0))
+			{
+
+				rowTemp = rowPos-1;
+				colTemp = colPos-2;
+				temp = ACCESS[rowPos+1][colPos];
+  				poss = true;
+			}
+			if((ACCESS[rowPos][colPos+1] < temp) &&(ACCESS[rowPos][colPos+1] != 0)&&(board[rowPos-2][colPos-1]== 0))
+			{
+				rowTemp = rowPos-2;
+				colTemp = colPos-1;
+				temp = ACCESS[rowPos][colPos+1];
+				poss = true;
+			}
+			rowPos=rowTemp;
+			colPos=colTemp;
+			return poss;
+		}
+
+		public void solveTour()
+		// primary method that drives the knight's tour solution.
+		{
+			while (true==getMove())
+			{
+				moves+=1;
+				board[rowPos][colPos]=moves;
+			}
+			System.out.println(moves + "  Moves");
+		}
+
+	}
